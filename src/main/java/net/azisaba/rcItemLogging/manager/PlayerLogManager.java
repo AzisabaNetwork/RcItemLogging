@@ -1,5 +1,6 @@
-package net.azisaba.rcItemLogging.logging;
+package net.azisaba.rcItemLogging.manager;
 
+import net.azisaba.rcItemLogging.logging.LogDateFormats;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

@@ -1,6 +1,6 @@
 package net.azisaba.rcItemLogging;
 
-import net.azisaba.rcItemLogging.logging.PlayerLogManager;
+import net.azisaba.rcItemLogging.manager.PlayerLogManager;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
