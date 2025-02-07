@@ -1,13 +1,8 @@
 package net.azisaba.rcItemLogging;
 
-import net.azisaba.rcItemLogging.logging.PlayerLogManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.UUID;
-
 public final class RcItemLogging extends JavaPlugin {
-    private PlayerLogManager playerLogManager;
-
     @Override
     public void onEnable() {
         getLogger().info("Initializing...");
@@ -15,7 +10,7 @@ public final class RcItemLogging extends JavaPlugin {
         if (!dataFolder.exists()) dataFolder.mkdirs();
 
         getLogger().info("Data folder path: " + getDataPath());
-        playerLogManager = new PlayerLogManager(getLogger(), dataFolder);
+        RcItemLoggingAPI.init(getLogger(), dataFolder);
 
         // log test code
 //        playerLogManager.put(
@@ -32,7 +27,7 @@ public final class RcItemLogging extends JavaPlugin {
     @Override
     public void onDisable() {
         getLogger().info("Disabling now...");
-        playerLogManager.closeAll();
+        RcItemLoggingAPI.close();
         getLogger().info("See you!");
     }
 }
