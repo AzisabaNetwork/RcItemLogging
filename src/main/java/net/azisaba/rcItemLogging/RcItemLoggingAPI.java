@@ -1,11 +1,11 @@
 package net.azisaba.rcItemLogging;
 
 import net.azisaba.rcItemLogging.manager.PlayerLogManager;
+import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
-import java.util.UUID;
 import java.util.logging.Logger;
 
 public final class RcItemLoggingAPI {
@@ -21,8 +21,8 @@ public final class RcItemLoggingAPI {
     public static void put(
             @NotNull String eventType,
             @NotNull String itemData,
-            @NotNull UUID playerFrom,
-            @NotNull UUID playerTo,
+            @NotNull OfflinePlayer playerFrom,
+            @NotNull OfflinePlayer playerTo,
             @Nullable String additionalMsg
     ) {
         if(!isInitialized()) throw new RuntimeException("Log manager wasn't initialized!");

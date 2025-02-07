@@ -1,6 +1,7 @@
 package net.azisaba.rcItemLogging.manager;
 
 import net.azisaba.rcItemLogging.logging.LogDateFormats;
+import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -17,11 +18,13 @@ public final class PlayerLogManager {
 
     private final Logger logger;
     private final File logFolderPath;
+    private final McIdManager mcIdManager;
 
     public PlayerLogManager(Logger logger, File logFolderPath) {
         this.logger = logger;
         this.logFolderPath = new File(logFolderPath, "logs");
         this.logFolderPath.mkdirs();
+        this.mcIdManager = new McIdManager(logger, new File(logFolderPath, "mcids.txt"));
     }
 
     private void openPlayerLog(UUID targetUuid) {
@@ -37,30 +40,34 @@ public final class PlayerLogManager {
     public void put(
             @NotNull String eventType,
             @NotNull String itemData,
-            @NotNull UUID playerFrom,
-            @NotNull UUID playerTo,
+            @NotNull OfflinePlayer playerFrom,
+            @NotNull OfflinePlayer playerTo,
             @Nullable String additionalMsg
     ) {
         StringJoiner sj = new StringJoiner(" ")
                 .add(getTimestampStr())
                 .add(eventType)
                 .add(itemData)
-                .add(playerFrom.toString())
+                .add(playerFrom.getName())
                 .add("to")
-                .add(playerTo.toString());
+                .add(playerTo.getName());
         if(additionalMsg != null) sj.add(additionalMsg);
         String _msg = sj.toString();
         _putSingle(playerFrom, _msg);
         _putSingle(playerTo, _msg);
     }
 
-    private void _putSingle(UUID targetUuid, String line) {
+    private void _putSingle(OfflinePlayer player, String line) {
+        var targetUuid = player.getUniqueId();
         if(!logStreamMap.containsKey(targetUuid)) {
             openPlayerLog(targetUuid);
         }
 
+
         var writer = logStreamMap.get(targetUuid);
         try {
+            String changes = mcIdManager.getMcIdChanges(player);
+            if(changes != null) writer.write(changes + System.lineSeparator());
             writer.write(line + System.lineSeparator());
             writer.flush();
         } catch (IOException e) {
@@ -77,6 +84,7 @@ public final class PlayerLogManager {
     }
 
     public void closeAll() {
+        logger.info("Closing each player log stream...");
         for (UUID _uuid : logStreamMap.keySet()) {
             try {
                 logStreamMap.get(_uuid).close();
@@ -84,6 +92,11 @@ public final class PlayerLogManager {
                 logger.warning("Failed to close log stream for " + _uuid + ": " + e);
             }
         }
+        logger.info("Log stream was closed.");
+
+        logger.info("Saving McIdManager data...");
+        mcIdManager.save();
+        logger.info("McIdManager data saved.");
     }
 
     private static String getTimestampStr() {
