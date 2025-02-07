@@ -20,11 +20,15 @@ public final class PlayerLogManager {
     private final File logFolderPath;
     private final McIdManager mcIdManager;
 
-    public PlayerLogManager(Logger logger, File logFolderPath) {
+    public PlayerLogManager(Logger logger, File parentFolderPath) {
         this.logger = logger;
-        this.logFolderPath = new File(logFolderPath, "logs");
-        this.logFolderPath.mkdirs();
-        this.mcIdManager = new McIdManager(logger, new File(logFolderPath, "mcids.txt"));
+        this.logFolderPath = new File(parentFolderPath, "logs");
+        if(!this.logFolderPath.exists()) {
+            if(!this.logFolderPath.mkdirs()) {
+                this.logger.warning("Failed to create directory. path:" + logFolderPath.getAbsolutePath());
+            }
+        }
+        this.mcIdManager = new McIdManager(logger, new File(parentFolderPath, "mcids.txt"));
     }
 
     private void openPlayerLog(UUID targetUuid) {

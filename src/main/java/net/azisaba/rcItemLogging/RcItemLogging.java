@@ -2,14 +2,16 @@ package net.azisaba.rcItemLogging;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.UUID;
-
 public final class RcItemLogging extends JavaPlugin {
     @Override
     public void onEnable() {
         getLogger().info("Initializing...");
         var dataFolder = getDataFolder();
-        if (!dataFolder.exists()) dataFolder.mkdirs();
+        if (!dataFolder.exists()) {
+            if(!dataFolder.mkdirs()) {
+                getLogger().warning("Failed to create directory. path:" + dataFolder.getAbsolutePath());
+            }
+        }
 
         getLogger().info("Data folder path: " + getDataPath());
         RcItemLoggingAPI.init(getLogger(), dataFolder);
