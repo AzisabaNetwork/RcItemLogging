@@ -60,7 +60,7 @@ public final class PlayerLogManager {
 
         var writer = logStreamMap.get(targetUuid);
         try {
-            writer.write(line);
+            writer.write(line + System.lineSeparator());
             writer.flush();
         } catch (IOException e) {
             logger.severe("Failed to write log data: " + e);
