@@ -27,10 +27,8 @@ jobs:
           java-version: 21
           cache: gradle
 
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v4
-        with:
-          cache-disabled: true
+      - name: Validate gradle wrapper
+        uses: gradle/actions/wrapper-validation@v3
 
       - name: Build with Gradle
         run: ./gradlew build --no-daemon
