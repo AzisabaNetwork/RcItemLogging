@@ -16,7 +16,6 @@ public final class RcItemLogging extends JavaPlugin {
 
         getLogger().info("Data folder path: " + getDataPath());
         playerLogManager = new PlayerLogManager(getLogger(), dataFolder);
-        playerLogManager.put(UUID.randomUUID());
         getLogger().info("Initialized!");
     }
 
