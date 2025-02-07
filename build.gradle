@@ -51,7 +51,7 @@ processResources {
 publishing {
     repositories {
         maven {
-            name = "azisaba-snapshots"
+            name = "azisaba-repo"
             credentials {
                 username = System.getenv("REPO_USERNAME")
                 password = System.getenv("REPO_PASSWORD")
