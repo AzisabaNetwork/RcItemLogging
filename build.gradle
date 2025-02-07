@@ -1,8 +1,9 @@
 plugins {
     id 'java'
+    id 'maven-publish'
 }
 
-group = 'com.sysnote8'
+group = 'net.azisaba.rcitemlogging'
 
 repositories {
     mavenCentral()
@@ -44,5 +45,23 @@ processResources {
     filteringCharset 'UTF-8'
     filesMatching('plugin.yml') {
         expand props
+    }
+}
+
+publishing {
+    repositories {
+        maven {
+            name = "azisaba-snapshots"
+            credentials {
+                username = System.getenv("REPO_USERNAME")
+                password = System.getenv("REPO_PASSWORD")
+            }
+
+            if(project.version.endsWith("-SNAPSHOT")) {
+                url = "https://repo.azisaba.net/repository/maven-snapshots/"
+            } else {
+                url = "https://repo.azisaba.net/repository/maven-releases/"
+            }
+        }
     }
 }
