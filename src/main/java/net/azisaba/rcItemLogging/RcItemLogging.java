@@ -1,7 +1,9 @@
 package net.azisaba.rcItemLogging;
 
-import net.azisaba.rcItemLogging.data.PlayerLogManager;
+import net.azisaba.rcItemLogging.logging.PlayerLogManager;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.util.UUID;
 
 public final class RcItemLogging extends JavaPlugin {
     private PlayerLogManager playerLogManager;
@@ -14,6 +16,16 @@ public final class RcItemLogging extends JavaPlugin {
 
         getLogger().info("Data folder path: " + getDataPath());
         playerLogManager = new PlayerLogManager(getLogger(), dataFolder);
+
+        // log test code
+//        playerLogManager.put(
+//                "welcome",
+//                "minecraft:stone",
+//                UUID.randomUUID(),
+//                UUID.randomUUID(),
+//                null
+//        );
+
         getLogger().info("Initialized!");
     }
 

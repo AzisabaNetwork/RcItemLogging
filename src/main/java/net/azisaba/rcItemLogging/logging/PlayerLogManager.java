@@ -1,9 +1,13 @@
-package net.azisaba.rcItemLogging.data;
+package net.azisaba.rcItemLogging.logging;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.StringJoiner;
 import java.util.UUID;
 import java.util.logging.Logger;
 
@@ -29,17 +33,45 @@ public final class PlayerLogManager {
         }
     }
 
-    public void put(UUID targetUuid) {
-        if (!logStreamMap.containsKey(targetUuid)) {
+    public void put(
+            @NotNull String eventType,
+            @NotNull String itemData,
+            @NotNull UUID playerFrom,
+            @NotNull UUID playerTo,
+            @Nullable String additionalMsg
+    ) {
+        StringJoiner sj = new StringJoiner(" ")
+                .add(getTimestampStr())
+                .add(eventType)
+                .add(itemData)
+                .add(playerFrom.toString())
+                .add("to")
+                .add(playerTo.toString());
+        if(additionalMsg != null) sj.add(additionalMsg);
+        String _msg = sj.toString();
+        _putSingle(playerFrom, _msg);
+        _putSingle(playerTo, _msg);
+    }
+
+    private void _putSingle(UUID targetUuid, String line) {
+        if(!logStreamMap.containsKey(targetUuid)) {
             openPlayerLog(targetUuid);
         }
 
         var writer = logStreamMap.get(targetUuid);
         try {
-            writer.write("Test Message!!");
+            writer.write(line);
             writer.flush();
         } catch (IOException e) {
             logger.severe("Failed to write log data: " + e);
+            logger.info("Fallback log: " + line);
+
+            try {
+                writer.close();
+            } catch (IOException ex) {
+                logger.severe("Omg, this is so bad: " + e);
+            }
+            logStreamMap.remove(targetUuid);
         }
     }
 
@@ -51,5 +83,9 @@ public final class PlayerLogManager {
                 logger.warning("Failed to close log stream for " + _uuid + ": " + e);
             }
         }
+    }
+
+    private static String getTimestampStr() {
+        return LogDateFormats.TIMESTAMP.format(System.currentTimeMillis());
     }
 }
