@@ -30,7 +30,7 @@ public final class PlayerLogManager {
     }
 
     public void put(UUID targetUuid) {
-        if(!logStreamMap.containsKey(targetUuid)) {
+        if (!logStreamMap.containsKey(targetUuid)) {
             openPlayerLog(targetUuid);
         }
 
@@ -44,7 +44,7 @@ public final class PlayerLogManager {
     }
 
     public void closeAll() {
-        for(UUID _uuid: logStreamMap.keySet()) {
+        for (UUID _uuid : logStreamMap.keySet()) {
             try {
                 logStreamMap.get(_uuid).close();
             } catch (Exception e) {
