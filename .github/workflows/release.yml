@@ -1,0 +1,103 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Extract version from tag
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    outputs:
+      version: ${{ steps.get_version.outputs.version }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch_depth: 0
+
+      - name: Get version
+        id: get_version
+        uses: jannemattila/get-version-from-tag@v4
+
+      - name: Validate gradle wrapper
+        uses: gradle/actions/wrapper-validation@v3
+
+      - name: Build
+        run: ./gradlew build --no-daemon
+        env:
+          VERSION: ${{ steps.get_version.outputs.version }}
+
+      - name: Upload a Build Artifact
+        uses: actions/upload-artifact@v4.4.3
+        with:
+          path: build/libs/
+
+  release:
+    name: Create github release
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    needs:
+      - build
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup java 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: adopt
+          java-version: 21
+          cache: gradle
+
+      - name: "Generate release changelog"
+        id: release_changelog
+        uses: janheinrichmerker/action-github-changelog-generator@v2.3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build for release
+        run: ./gradlew jar --no-daemon
+        env:
+          VERSION: ${{ needs.build.outputs.version }}
+
+      - name: Create Release
+        uses: ncipollo/release-action@v1.15.0
+        with:
+          artifacts: "build/libs/^(?!original-).*(?<!sources|api)(-all)*\.jar"
+          body: ${{ steps.release_changelog.outputs.changelog }}
+
+  publish:
+    name: Publish to azisaba repo
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    needs:
+      - build
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup java 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: adopt
+          java-version: 21
+          cache: gradle
+
+      - name: Publish to azisaba repo
+        run: ./gradlew publish --no-daemon
+        env:
+          VERSION: ${{ needs.build.outputs.version }}
+          REPO_USERNAME: ${{ secrets.REPO_USERNAME }}
+          REPO_PASSWORD: ${{ secrets.REPO_PASSWORD }}
