@@ -1,9 +1,11 @@
 name: Release
 
 on:
-  push:
-    tags:
-      - "v*"
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Plugin version. ex: x.x.x, x.x.x-SNAPSHOT'
+        required: true
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -14,17 +16,11 @@ jobs:
     name: Extract version from tag
     runs-on: ubuntu-latest
     timeout-minutes: 3
-    outputs:
-      version: ${{ steps.get_version.outputs.version-without-v }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
           fetch_depth: 0
-
-      - name: Get version
-        id: get_version
-        uses: baileyherbert/version-action@v3
 
       - name: Validate gradle wrapper
         uses: gradle/actions/wrapper-validation@v3
@@ -32,7 +28,7 @@ jobs:
       - name: Build
         run: ./gradlew build --no-daemon
         env:
-          VERSION: ${{ steps.get_version.outputs.version-without-v }}
+          VERSION: ${{ github.event.inputs.version }}
 
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v4.4.3
@@ -69,7 +65,7 @@ jobs:
       - name: Build for release
         run: ./gradlew jar --no-daemon
         env:
-          VERSION: ${{ needs.build.outputs.version }}
+          VERSION: ${{ github.event.inputs.version }}
 
       - name: Create Release
         uses: ncipollo/release-action@v1.15.0
@@ -98,6 +94,6 @@ jobs:
       - name: Publish to azisaba repo
         run: ./gradlew publish --no-daemon
         env:
-          VERSION: ${{ needs.build.outputs.version }}
+          VERSION: ${{ github.event.inputs.version }}
           REPO_USERNAME: ${{ secrets.REPO_USERNAME }}
           REPO_PASSWORD: ${{ secrets.REPO_PASSWORD }}
