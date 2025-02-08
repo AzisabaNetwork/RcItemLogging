@@ -69,7 +69,7 @@ jobs:
         uses: ncipollo/release-action@v1.15.0
         with:
           tag: ${{ github.event.inputs.version }}
-          artifacts: 'build/libs/^(?!original-).*(?<!sources|api)(-all)*\.jar'
+          artifacts: 'build/libs/*.jar'
           body: ${{ steps.release_changelog.outputs.changelog }}
 
   publish:
