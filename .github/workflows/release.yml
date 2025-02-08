@@ -54,11 +54,11 @@ jobs:
           java-version: 21
           cache: gradle
 
-      - name: "Generate release changelog"
-        id: release_changelog
-        uses: janheinrichmerker/action-github-changelog-generator@v2.3
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+#      - name: "Generate release changelog"
+#        id: release_changelog
+#        uses: janheinrichmerker/action-github-changelog-generator@v2.3
+#        with:
+#          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build for release
         run: ./gradlew jar --no-daemon
@@ -70,7 +70,7 @@ jobs:
         with:
           tag: ${{ github.event.inputs.version }}
           artifacts: 'build/libs/*.jar'
-          body: ${{ steps.release_changelog.outputs.changelog }}
+#          body: ${{ steps.release_changelog.outputs.changelog }}
 
   publish:
     name: Publish to azisaba repo
