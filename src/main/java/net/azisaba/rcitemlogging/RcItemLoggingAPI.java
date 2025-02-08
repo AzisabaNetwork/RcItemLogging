@@ -30,6 +30,30 @@ public final class RcItemLoggingAPI {
         playerLogManager.put(eventType, itemData, playerFrom, playerTo, additionalMsg);
     }
 
+    public void putSystem(
+            @NotNull String eventType,
+            @NotNull String itemData,
+            @NotNull String playerFrom,
+            @NotNull OfflinePlayer playerTo,
+            @Nullable String additionalMsg
+    ) {
+        if(!isInitialized()) throw new RuntimeException("Log manager wasn't initialized!");
+
+        playerLogManager.putSystem(eventType, itemData, playerFrom, playerTo, additionalMsg);
+    }
+
+    public void putSystem(
+            @NotNull String eventType,
+            @NotNull String itemData,
+            @NotNull OfflinePlayer playerFrom,
+            @NotNull String playerTo,
+            @Nullable String additionalMsg
+    ) {
+        if(!isInitialized()) throw new RuntimeException("Log manager wasn't initialized!");
+
+        playerLogManager.putSystem(eventType, itemData, playerFrom, playerTo, additionalMsg);
+    }
+
     static void close() {
         playerLogManager.closeAll();
     }

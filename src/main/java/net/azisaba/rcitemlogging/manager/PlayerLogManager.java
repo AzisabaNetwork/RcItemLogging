@@ -48,17 +48,31 @@ public final class PlayerLogManager {
             @NotNull OfflinePlayer playerTo,
             @Nullable String additionalMsg
     ) {
-        StringJoiner sj = new StringJoiner(" ")
-                .add(getTimestampStr())
-                .add(eventType)
-                .add(itemData)
-                .add(playerFrom.getName())
-                .add("to")
-                .add(playerTo.getName());
-        if(additionalMsg != null) sj.add(additionalMsg);
-        String _msg = sj.toString();
+        String _msg = createLogLine(eventType, itemData, playerFrom.getName(), playerTo.getName(), additionalMsg);
         _putSingle(playerFrom, _msg);
         _putSingle(playerTo, _msg);
+    }
+
+    public void putSystem(
+            @NotNull String eventType,
+            @NotNull String itemData,
+            @NotNull String playerFrom,
+            @NotNull OfflinePlayer playerTo,
+            @Nullable String additionalMsg
+    ) {
+        String _msg = createLogLine(eventType, itemData, playerFrom, playerTo.getName(), additionalMsg);
+        _putSingle(playerTo, _msg);
+    }
+
+    public void putSystem(
+            @NotNull String eventType,
+            @NotNull String itemData,
+            @NotNull OfflinePlayer playerFrom,
+            @NotNull String playerTo,
+            @Nullable String additionalMsg
+    ) {
+        String _msg = createLogLine(eventType, itemData, playerFrom.getName(), playerTo, additionalMsg);
+        _putSingle(playerFrom, _msg);
     }
 
     private void _putSingle(OfflinePlayer player, String line) {
@@ -101,6 +115,24 @@ public final class PlayerLogManager {
         logger.info("Saving McIdManager data...");
         mcIdManager.save();
         logger.info("McIdManager data saved.");
+    }
+
+    private static String createLogLine(
+            @NotNull String eventType,
+            @NotNull String itemData,
+            @NotNull String from,
+            @NotNull String to,
+            @Nullable String additionalMsg
+    ) {
+        StringJoiner sj = new StringJoiner(" ")
+                .add(getTimestampStr())
+                .add(eventType)
+                .add(itemData)
+                .add(from)
+                .add("to")
+                .add(to);
+        if(additionalMsg != null) sj.add(additionalMsg);
+        return sj.toString();
     }
 
     private static String getTimestampStr() {
