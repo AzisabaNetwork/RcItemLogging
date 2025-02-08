@@ -30,7 +30,7 @@ public final class RcItemLoggingAPI {
         playerLogManager.put(eventType, itemData, playerFrom, playerTo, additionalMsg);
     }
 
-    public void putSystem(
+    public static void putSystem(
             @NotNull String eventType,
             @NotNull String itemData,
             @NotNull String playerFrom,
@@ -42,7 +42,7 @@ public final class RcItemLoggingAPI {
         playerLogManager.putSystem(eventType, itemData, playerFrom, playerTo, additionalMsg);
     }
 
-    public void putSystem(
+    public static void putSystem(
             @NotNull String eventType,
             @NotNull String itemData,
             @NotNull OfflinePlayer playerFrom,
