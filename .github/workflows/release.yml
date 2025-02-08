@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 3
     outputs:
-      version: ${{ steps.get_version.outputs.version }}
+      version: ${{ steps.get_version.outputs.version-without-v }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -24,7 +24,7 @@ jobs:
 
       - name: Get version
         id: get_version
-        uses: jannemattila/get-version-from-tag@v4
+        uses: baileyherbert/version-action@v3
 
       - name: Validate gradle wrapper
         uses: gradle/actions/wrapper-validation@v3
@@ -32,7 +32,7 @@ jobs:
       - name: Build
         run: ./gradlew build --no-daemon
         env:
-          VERSION: ${{ steps.get_version.outputs.version }}
+          VERSION: ${{ steps.get_version.outputs.version-without-v }}
 
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v4.4.3
