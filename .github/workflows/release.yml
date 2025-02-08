@@ -70,7 +70,7 @@ jobs:
       - name: Create Release
         uses: ncipollo/release-action@v1.15.0
         with:
-          tags: ${{ github.event.inputs.version }}
+          tag: ${{ github.event.inputs.version }}
           artifacts: 'build/libs/^(?!original-).*(?<!sources|api)(-all)*\.jar'
           body: ${{ steps.release_changelog.outputs.changelog }}
 
