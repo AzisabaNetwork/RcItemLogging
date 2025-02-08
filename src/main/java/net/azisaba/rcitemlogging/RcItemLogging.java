@@ -1,4 +1,4 @@
-package net.azisaba.rcItemLogging;
+package net.azisaba.rcitemlogging;
 
 import org.bukkit.plugin.java.JavaPlugin;
 

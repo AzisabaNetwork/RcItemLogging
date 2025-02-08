@@ -1,4 +1,4 @@
-package net.azisaba.rcItemLogging.manager;
+package net.azisaba.rcitemlogging.manager;
 
 import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.Nullable;

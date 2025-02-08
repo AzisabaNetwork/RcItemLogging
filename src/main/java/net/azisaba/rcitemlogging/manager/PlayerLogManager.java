@@ -1,6 +1,6 @@
-package net.azisaba.rcItemLogging.manager;
+package net.azisaba.rcitemlogging.manager;
 
-import net.azisaba.rcItemLogging.logging.LogDateFormats;
+import net.azisaba.rcitemlogging.logging.LogDateFormats;
 import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

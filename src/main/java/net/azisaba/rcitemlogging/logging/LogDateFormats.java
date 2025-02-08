@@ -1,4 +1,4 @@
-package net.azisaba.rcItemLogging.logging;
+package net.azisaba.rcitemlogging.logging;
 
 import java.text.SimpleDateFormat;
 

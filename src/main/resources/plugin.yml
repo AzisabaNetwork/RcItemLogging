@@ -1,5 +1,5 @@
 name: RcItemLogging
 version: '${version}'
-main: net.azisaba.rcItemLogging.RcItemLogging
+main: net.azisaba.rcitemlogging.RcItemLogging
 api-version: '1.21'
 description: Logging plugin for rcpve.
