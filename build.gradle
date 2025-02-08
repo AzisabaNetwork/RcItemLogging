@@ -53,15 +53,10 @@ publishing {
     repositories {
         maven {
             name = "azisaba-repo"
+            url = "https://repo.azisaba.net/repository/maven-releases/"
             credentials {
                 username = System.getenv("REPO_USERNAME")
                 password = System.getenv("REPO_PASSWORD")
-            }
-
-            if(project.version.endsWith("-SNAPSHOT")) {
-                url = "https://repo.azisaba.net/repository/maven-snapshots/"
-            } else {
-                url = "https://repo.azisaba.net/repository/maven-releases/"
             }
         }
     }
