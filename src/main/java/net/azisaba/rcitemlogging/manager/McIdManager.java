@@ -15,8 +15,6 @@ import java.util.logging.Logger;
 
 /**
  * Watch mcid changes for logging
- *
- * @since 0.1.2
  */
 public class McIdManager implements Listener {
     private static File getOldFileName(File targetFile) {
