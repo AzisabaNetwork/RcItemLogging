@@ -50,9 +50,9 @@ tasks.processResources {
 publishing {
     publications {
         create<MavenPublication>("maven") {
-            groupId = group.toString()
-            artifactId = name
-            version = version
+            groupId = project.group.toString()
+            artifactId = project.name
+            version = project.version.toString()
             artifact(tasks.jar)
         }
     }
