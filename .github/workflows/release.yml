@@ -54,6 +54,9 @@ jobs:
           java-version: 21
           cache: gradle
 
+      - name: Validate gradle wrapper
+        uses: gradle/actions/wrapper-validation@v3
+
 #      - name: "Generate release changelog"
 #        id: release_changelog
 #        uses: janheinrichmerker/action-github-changelog-generator@v2.3
