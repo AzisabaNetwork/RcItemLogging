@@ -2,6 +2,8 @@ package net.azisaba.rcitemlogging.api;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.UUID;
+
 public interface IApi {
     /**
      * Add log to nameFrom & nameTo player's log files.
@@ -14,6 +16,7 @@ public interface IApi {
             @NotNull String eventType,
             @NotNull String nameFrom,
             @NotNull String nameTo,
-            @NotNull String message
+            @NotNull String message,
+            @NotNull UUID... targets
     );
 }
