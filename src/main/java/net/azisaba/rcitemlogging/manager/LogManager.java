@@ -23,7 +23,9 @@ public class LogManager {
         this.logger = logger;
         this.logFolder = new File(dataFolder, "logs");
         if(!this.logFolder.exists()) {
-            this.logFolder.mkdirs(); // TODO: handle this
+            if(!this.logFolder.mkdirs()) {
+                logger.severe("Failed to create logFolder. Please check permission.");
+            }
         }
     }
 
