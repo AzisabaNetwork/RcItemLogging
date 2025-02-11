@@ -11,6 +11,7 @@ public interface IApi {
      * @param nameFrom event from
      * @param nameTo event to
      * @param message event detailed description
+     * @param targets who this log append to
      */
     void put(
             @NotNull String eventType,
